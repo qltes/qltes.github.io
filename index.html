@@ -1,19 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ql's website</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="icon" type="image/png" href="whos-worth-pulling-v0-55hsgcx9hu1f1.jpg" />
-  </head>
-  <body>
-    <div class="coming-container">
-      <h1 class="title">something coming soon</h1>
-      <p class="subtitle" id="loading-text">idk</p>
-      <div class="loader"></div>
-      <img src="image-removebg-preview(1).png" class="funny-image" id="funny-image" />
-    </div>
-    <script src="script.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ql's website</title>
+  <link rel="icon" type="image/png" href="whos-worth-pulling-v0-55hsgcx9hu1f1.jpg" />
+  <style>
+    body {
+      background: #0a0a0a;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .coming-container {
+      text-align: center;
+      padding: 20px;
+      position: relative;
+    }
+
+    .title {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-shadow: 0 0 20px #ff00ff;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      opacity: 0.7;
+      margin-bottom: 30px;
+    }
+
+    .loader {
+      width: 60px;
+      height: 60px;
+      border: 6px solid #333;
+      border-top: 6px solid #ff00ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .funny-image {
+      position: absolute;
+      top: 50%;
+      left: -80px;
+      transform: translateY(-50%);
+      width: 100px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="coming-container">
+    <h1 class="title">something coming soon</h1>
+    <p class="subtitle" id="loading-text">idk</p>
+    <div class="loader"></div>
+    <img src="skeleton.png" class="funny-image" id="funny-image" />
+  </div>
+
+  <script>
+    const loadingText = document.getElementById('loading-text');
+    const funnyImage = document.getElementById('funny-image');
+
+    const messages = [
+      'loading...',
+      'almost there...',
+      'still loading...',
+      'this might take a while...',
+      'patience is a virtue...'
+    ];
+
+    const funnyMessage = 'HOLY SHIT DID YALL SEE THAT 👀';
+
+    let currentIndex = 0;
+    let specialEventFrequency = 0.1; // 10% chance per cycle
+    let funnyMessageDuration = 3000; // ms
+
+    function showNextMessage() {
+      if (loadingText.dataset.locked === 'true') return;
+      loadingText.textContent = messages[currentIndex];
+      currentIndex = (currentIndex + 1) % messages.length;
+    }
+
+    function triggerFunnyEvent() {
+      loadingText.dataset.locked = 'true';
+      loadingText.textContent = funnyMessage;
+      funnyImage.style.display = 'block';
+
+      const startX = -funnyImage.offsetWidth * 0.8; // partially off-screen left
+      const endX = window.innerWidth - funnyImage.offsetWidth * 0.2; // partially visible right
+      const duration = 800; // fast animation in ms
+      const startTime = performance.now();
+
+      function animate(time) {
+        const progress = (time - startTime) / duration;
+        if (progress < 1) {
+          funnyImage.style.left = startX + progress * (endX - startX) + 'px';
+          requestAnimationFrame(animate);
+        } else {
+          funnyImage.style.display = 'none';
+          loadingText.dataset.locked = 'false';
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    setInterval(() => {
+      if (Math.random() < specialEventFrequency) {
+        triggerFunnyEvent();
+      } else {
+        showNextMessage();
+      }
+    }, 2000);
+  </script>
+</body>
 </html>
