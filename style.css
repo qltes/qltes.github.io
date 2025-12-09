@@ -13,6 +13,7 @@ body {
 .coming-container {
   text-align: center;
   padding: 20px;
+  position: relative;
 }
 
 .title {
@@ -39,11 +40,15 @@ body {
 }
 
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 
-  to {
-    transform: rotate(360deg);
-  }
+.funny-image {
+  position: absolute;
+  top: 50%;
+  left: -200px;
+  transform: translateY(-50%);
+  width: 100px;
+  display: none;
 }
